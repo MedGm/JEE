@@ -160,6 +160,4 @@ Exemples de liens de navigation:
 - Pagination et recherche
 - Sécurité (authentification) et validations côté client
 
----
-
-Placez vos captures d'écran dans le dossier `docs/` et mettez à jour les liens d'images ci-dessus.
+Fait par EL GORRIM MOHAMED en 06/10/2025
