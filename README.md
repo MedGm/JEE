@@ -45,11 +45,13 @@ Chaque atelier est un projet indépendant qui illustre un aspect des standards J
 1. Cloner le dépôt :
    ```bash
    git clone https://github.com/MedGm/JEE.git
-   cd JEE```
+   cd JEE
+   ```
 
 2. Naviguer dans l’atelier souhaité :
    ```bash
-   cd atelier1_mvc2```
+   cd atelier1_mvc2
+   ```
 
    
 Réalisé par El Gorrim Mohamed
