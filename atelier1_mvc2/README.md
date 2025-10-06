@@ -114,12 +114,18 @@ Dossier: `src/main/webapp`
 - `views/commande/list.jsp`: table + formulaire de création de commande (sans total)
 - `views/commande/lignes.jsp`: commandes d'un client, leurs lignes, formulaire d'ajout de ligne, suppression ligne
 
-Captures d'écran (à insérer dans `docs/`):
-- Accueil: `docs/ui-index.png`
-- Clients: `docs/ui-clients.png`
-- Produits: `docs/ui-produits.png`
-- Commandes: `docs/ui-commandes.png`
-- Lignes: `docs/ui-lignes.png`
+Captures d'écran  
+
+![Accueil](docs/ui-index.png)  
+
+![Clients](docs/ui-clients.png)  
+
+![Produits](docs/ui-produits.png)  
+
+![Commandes](docs/ui-commandes.png)  
+
+![Lignes](docs/ui-lignes.png)  
+
 
 Exemples de liens de navigation:
 - `/clients`, `/produits`, `/commandes`, `/lignes?clientId=1`
