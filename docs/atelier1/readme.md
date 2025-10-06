@@ -1,1 +1,0 @@
-# Doc File for Screenshots.
