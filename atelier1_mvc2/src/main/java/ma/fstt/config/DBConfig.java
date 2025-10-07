@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class DBConfig {
     private static final String URL = "jdbc:mysql://localhost:3306/ateliermvc?useSSL=false&serverTimezone=UTC";
     private static final String USER = "root";
-    private static final String PASSWORD = "medgm0801";
+    private static final String PASSWORD = "";
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
