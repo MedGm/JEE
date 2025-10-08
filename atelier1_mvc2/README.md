@@ -4,7 +4,7 @@ Ce mini-rapport documente les étapes de réalisation de l'application MVC2 conf
 
 ## 1. Diagramme UML (Classes)
 
-Placez ici une capture d'écran du diagramme de classes (Client, Produit, Commande, LigneDeCommande):
+ici une capture d'écran du diagramme de classes (Client, Produit, Commande, LigneDeCommande):
 
 ![UML Diagram](docs/uml.png)
 
@@ -19,7 +19,7 @@ Relations:
 
 ## 2. Schéma de base de données (MySQL)
 
-Placez ici une capture d'écran phpMyAdmin du schéma et/ou des tables:
+ici une capture d'écran phpMyAdmin du schéma et/ou des tables:
 
 ![DB Schema](docs/db.png)
 
