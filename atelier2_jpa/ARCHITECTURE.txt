@@ -1,0 +1,193 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    APPLICATION E-COMMERCE JPA - ARCHITECTURE                  ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              COUCHE PRÉSENTATION                            │
+│                                  (JSP + JSTL + jQuery)                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
+│  │   Produits   │  │ Internautes  │  │   Vitrines   │  │    Panier    │     │
+│  ├──────────────┤  ├──────────────┤  ├──────────────┤  ├──────────────┤     │
+│  │ - list.jsp   │  │ - list.jsp   │  │ - list.jsp   │  │ - list.jsp   │     │
+│  │ - add.jsp    │  │ - add.jsp    │  │ - add.jsp    │  │              │     │
+│  │              │  │ - edit.jsp   │  │ - view.jsp   │  │              │     │
+│  │              │  │              │  │ - addProd.jsp│  │              │     │
+│  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────┘     │
+│                                                                             │
+└──────────────────────────────┬──────────────────────────────────────────────┘
+                               │ HTTP Request/Response
+                               ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              COUCHE CONTRÔLEUR                              │
+│                             (Servlets Multi-Actions)                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────────────┐  ┌─────────────────────┐  ┌────────────────────┐   │
+│  │  ProduitServlet     │  │ InternauteServlet   │  │  VitrineServlet    │   │
+│  │  (/produit)         │  │ (/internaute)       │  │  (/vitrine)        │   │
+│  ├─────────────────────┤  ├─────────────────────┤  ├────────────────────┤   │
+│  │ • list              │  │ • list              │  │ • list             │   │
+│  │ • addForm           │  │ • addForm           │  │ • addForm          │   │
+│  │ • add               │  │ • add               │  │ • add              │   │
+│  │ • delete            │  │ • editForm          │  │ • view             │   │
+│  │                     │  │ • update            │  │ • delete           │   │
+│  │                     │  │ • delete            │  │ • addProduitForm   │   │
+│  │                     │  │                     │  │ • addProduit       │   │
+│  │                     │  │                     │  │ • removeProduit    │   │
+│  └─────────────────────┘  └─────────────────────┘  └────────────────────┘   │
+│                                                                             │
+│                          ┌──────────────────────┐                           │
+│                          │   PanierServlet      │                           │
+│                          │   (/panier)          │                           │
+│                          ├──────────────────────┤                           │
+│                          │ • afficher           │                           │
+│                          │ • ajouter            │                           │
+│                          │ • supprimer          │                           │
+│                          └──────────────────────┘                           │
+│                                                                             │
+└──────────────────────────────┬──────────────────────────────────────────────┘
+                               │ JpaUtil.getEntityManager()
+                               ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              COUCHE UTILITAIRE                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│                          ┌──────────────────────┐                           │
+│                          │      JpaUtil         │                           │
+│                          ├──────────────────────┤                           │
+│                          │ + getEntityManager() │                           │
+│                          │ + close()            │                           │
+│                          └──────────────────────┘                           │
+│                                                                             │
+└──────────────────────────────┬──────────────────────────────────────────────┘
+                               │ EntityManager
+                               ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              COUCHE MODÈLE                                  │
+│                              (Entités JPA)                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│      ┌────────────┐                    ┌────────────┐                       │
+│      │ Internaute │───────1:1─────────>│   Panier   │                       │
+│      └────────────┘                    └────────────┘                       │
+│                                              │                              │
+│                                            1:N                              │
+│                                              │                              │
+│                                              ▼                              │
+│      ┌────────────┐                    ┌──────────────┐                     │
+│      │  Produit   │<──────N:1──────────│ LignePanier  │                     │
+│      └────────────┘                    └──────────────┘                     │
+│           ▲                                                                 │
+│           │                                                                 │
+│          N:1                                                                │
+│           │                                                                 │
+│      ┌────────────┐                                                         │
+│      │  Vitrine   │                                                         │
+│      └────────────┘                                                         │
+│                                                                             │
+└──────────────────────────────┬──────────────────────────────────────────────┘
+                               │ JDBC / JPA
+                               ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           BASE DE DONNÉES                                   │
+│                              MySQL 9.4.0                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   Tables:                                                                   │
+│   • produits                                                                │
+│   • internaute                                                              │
+│   • panier                                                                  │
+│   • ligne_panier                                                            │
+│   • vitrine                                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                           FLUX DE TRAITEMENT MVC 2                            ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+1. CLIENT (Browser)
+   │
+   ├─> Envoie requête HTTP (ex: /produit?action=list)
+   │
+   ▼
+2. SERVLET (Controller)
+   │
+   ├─> Parse les paramètres (action, id, etc.)
+   ├─> Appelle JpaUtil pour obtenir EntityManager
+   ├─> Exécute requête JPA (SELECT, INSERT, UPDATE, DELETE)
+   ├─> Traite les résultats
+   ├─> Place les données dans request.setAttribute()
+   │
+   ▼
+3. JSP (View)
+   │
+   ├─> Récupère les données via ${attribut}
+   ├─> Utilise JSTL pour itération/conditions
+   ├─> jQuery pour interactions client-side
+   ├─> Génère HTML
+   │
+   ▼
+4. CLIENT (Browser)
+   │
+   └─> Affiche la page HTML
+       └─> Peut déclencher une nouvelle requête
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                           TECHNOLOGIES UTILISÉES                              ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────┬──────────────────────────────────────────────────────────────┐
+│  Backend    │  • Jakarta EE 10 (Servlet API 6.1.0)                         │
+│             │  • JPA 3.1 (EclipseLink 4.0.7)                               │
+│             │  • MySQL Connector 9.4.0                                     │
+│             │  • Lombok 1.18.42                                            │
+│             │  • Weld CDI 6.0.3                                            │
+├─────────────┼──────────────────────────────────────────────────────────────┤
+│  Frontend   │  • JSP 3.1                                                   │
+│             │  • JSTL 3.0                                                  │
+│             │  • jQuery 3.7.1                                              │
+│             │  • CSS3 (Design moderne et responsive)                       │
+├─────────────┼──────────────────────────────────────────────────────────────┤
+│  Build      │  • Maven 3.x                                                 │
+│             │  • maven-war-plugin 3.4.0                                    │
+├─────────────┼──────────────────────────────────────────────────────────────┤
+│  Database   │  • MySQL 9.4                                                 │
+│             │  • DDL auto-generation via EclipseLink                       │
+├─────────────┼──────────────────────────────────────────────────────────────┤
+│  Server     │  • WildFly / Jakarta EE compatible server                    │
+└─────────────┴──────────────────────────────────────────────────────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                          FEATURES & CAPABILITIES                              ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+✓ Architecture MVC 2 stricte
+✓ Servlets multi-actions (pattern Front Controller)
+✓ CRUD complet pour toutes les entités
+✓ Relations JPA (OneToOne, OneToMany, ManyToOne)
+✓ Cascade operations et orphan removal
+✓ Transaction management
+✓ Session-based shopping cart
+✓ JSTL pour toutes les vues (zero scriptlets)
+✓ jQuery pour validation et UX
+✓ Responsive design
+✓ Real-time search
+✓ Form validation (client & server)
+✓ Confirmation dialogs
+✓ Animations et transitions
+✓ Error handling
+✓ Currency formatting
+✓ Dynamic product selection
+✓ Automatic total calculation
+✓ Modern gradient design
+
+═══════════════════════════════════════════════════════════════════════════════
+                              Octobre 2025
+═══════════════════════════════════════════════════════════════════════════════
+
