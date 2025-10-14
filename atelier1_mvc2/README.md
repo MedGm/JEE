@@ -4,7 +4,7 @@ Ce mini-rapport documente les étapes de réalisation de l'application MVC2 conf
 
 ## 1. Diagramme UML (Classes)
 
-Placez ici une capture d'écran du diagramme de classes (Client, Produit, Commande, LigneDeCommande):
+ici une capture d'écran du diagramme de classes (Client, Produit, Commande, LigneDeCommande):
 
 ![UML Diagram](docs/uml.png)
 
@@ -19,7 +19,7 @@ Relations:
 
 ## 2. Schéma de base de données (MySQL)
 
-Placez ici une capture d'écran phpMyAdmin du schéma et/ou des tables:
+ici une capture d'écran phpMyAdmin du schéma et/ou des tables:
 
 ![DB Schema](docs/db.png)
 
@@ -114,12 +114,18 @@ Dossier: `src/main/webapp`
 - `views/commande/list.jsp`: table + formulaire de création de commande (sans total)
 - `views/commande/lignes.jsp`: commandes d'un client, leurs lignes, formulaire d'ajout de ligne, suppression ligne
 
-Captures d'écran (à insérer dans `docs/`):
-- Accueil: `docs/ui-index.png`
-- Clients: `docs/ui-clients.png`
-- Produits: `docs/ui-produits.png`
-- Commandes: `docs/ui-commandes.png`
-- Lignes: `docs/ui-lignes.png`
+Captures d'écran  
+
+![Accueil](docs/ui-index.png)  
+
+![Clients](docs/ui-clients.png)  
+
+![Produits](docs/ui-produits.png)  
+
+![Commandes](docs/ui-commandes.png)  
+
+![Lignes](docs/ui-lignes.png)  
+
 
 Exemples de liens de navigation:
 - `/clients`, `/produits`, `/commandes`, `/lignes?clientId=1`
@@ -160,6 +166,4 @@ Exemples de liens de navigation:
 - Pagination et recherche
 - Sécurité (authentification) et validations côté client
 
----
-
-Placez vos captures d'écran dans le dossier `docs/` et mettez à jour les liens d'images ci-dessus.
+Fait par EL GORRIM MOHAMED en 06/10/2025
