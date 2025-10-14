@@ -1,5 +1,6 @@
 # Application E-Commerce JPA
 (Voir Architecture de l'application en fichier /ARCHITECTURE.txt)
+
 Application web de gestion e-commerce développée avec Jakarta EE et JPA.
 
 Architecture MVC 2 Respectée
