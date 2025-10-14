@@ -58,7 +58,6 @@ public class CommandeController extends HttpServlet {
 					date_commande = date_commande.replace('T', ' ') + ":00";
 				}
 				Long client_id = Long.parseLong(req.getParameter("client_id"));
-				// validate client exists to avoid FK violation
 				ma.fstt.entities.Client probe = new ma.fstt.entities.Client();
 				probe.setClient_id(client_id);
 				ma.fstt.entities.Client existing = clientService.findOne(probe);

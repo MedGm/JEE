@@ -6,7 +6,7 @@ Ce mini-rapport documente les étapes de réalisation de l'application MVC2 conf
 
 ici une capture d'écran du diagramme de classes (Client, Produit, Commande, LigneDeCommande):
 
-![UML Diagram](docs/uml.png)
+![UML Diagram](docs/atelier1/uml.png)
 
 - Client(client_id, nom, email, adresse)
 - Produit(id, nom, prix, stock)
@@ -21,7 +21,7 @@ Relations:
 
 ici une capture d'écran phpMyAdmin du schéma et/ou des tables:
 
-![DB Schema](docs/db.png)
+![DB Schema](docs/atelier1/db.png)
 
 SQL utilisé (extrait):
 ```
@@ -166,4 +166,8 @@ Exemples de liens de navigation:
 - Pagination et recherche
 - Sécurité (authentification) et validations côté client
 
+<<<<<<< Updated upstream
 Fait par EL GORRIM MOHAMED en 06/10/2025
+=======
+---
+>>>>>>> Stashed changes
