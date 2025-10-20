@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:jsf="jakarta.faces"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Register - E-Commerce Store</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+
+<h:body>
+    <div class="container">
+        <div class="register-container">
+            <h2>Create New Account</h2>
+            
+            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true"/>
+            
+            <h:form>
+                <p:panel header="Register New Account">
+                    <p:panelGrid columns="2" style="width: 100%;">
+                        <h:outputLabel for="firstName" value="First Name:"/>
+                        <p:inputText id="firstName" value="#{userBean.newUser.firstName}" required="true" 
+                                   placeholder="Enter your first name"/>
+                        
+                        <h:outputLabel for="lastName" value="Last Name:"/>
+                        <p:inputText id="lastName" value="#{userBean.newUser.lastName}" required="true" 
+                                   placeholder="Enter your last name"/>
+                        
+                        <h:outputLabel for="email" value="Email:"/>
+                        <p:inputText id="email" value="#{userBean.newUser.email}" required="true" 
+                                   placeholder="Enter your email"/>
+                        
+                        <h:outputLabel for="password" value="Password:"/>
+                        <p:password id="password" value="#{userBean.newUser.password}" required="true" 
+                                  placeholder="Enter your password"/>
+                        
+                        <h:outputLabel for="phone" value="Phone:"/>
+                        <p:inputText id="phone" value="#{userBean.newUser.phone}" 
+                                   placeholder="Enter your phone number"/>
+                        
+                        <h:outputLabel for="address" value="Address:"/>
+                        <p:inputTextarea id="address" value="#{userBean.newUser.address}" 
+                                       placeholder="Enter your address"/>
+                    </p:panelGrid>
+                    
+                    <p:separator/>
+                    
+                    <p:commandButton value="Register" action="#{userBean.register}" 
+                                   styleClass="ui-button-success" style="width: 100%;"/>
+                    
+                    <p:separator/>
+                    
+                    <p:button value="Already have an account? Login" outcome="login" 
+                                   styleClass="ui-button-info" style="width: 100%;"/>
+                    
+                    <p:button value="Back to Home" outcome="index" 
+                                   styleClass="ui-button-secondary" style="width: 100%;"/>
+                </p:panel>
+            </h:form>
+        </div>
+    </div>
+</h:body>
+</html>

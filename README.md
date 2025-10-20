@@ -23,7 +23,7 @@ Chaque atelier est un projet indépendant qui illustre un aspect des standards J
 |---------|---------|-------------|
 | **Atelier 1 – MVC2 (Servlet/JSP/DAO/CDI)** | [`atelier1_mvc2`](atelier1_mvc2/) | Première application web basée sur MVC2 : gestion des clients, produits et commandes avec DAO et CDI. *(Contient un README détaillé du projet)* |
 | **Atelier 2 – JPA** | [`atelier2_jpa`](https://github.com/MedGm/JEE/tree/master/atelier2_jpa) | Application web avec JPA pour la persistance des données. |
-| Atelier 3 – *(à venir)* | `atelier3_xxx` | … |
+| **Atelier 3 – JSF & JPA** | [`atelier3_jsf`](https://github.com/MedGm/JEE/tree/master/atelier3_jsf) | Application E-Commerce avec JSF, JPA, et PrimeFaces. |
 
 > Chaque dossier contient son propre README.md détaillant le fonctionnement du projet.
 

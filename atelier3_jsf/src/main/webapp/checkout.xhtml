@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:jsf="jakarta.faces"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Checkout - E-Commerce Store</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+
+<h:body>
+    <div class="container">
+        <!-- Header -->
+        <p:toolbar>
+            <f:facet name="left">
+                <h:outputText value="Checkout" style="font-size: 24px; font-weight: bold;"/>
+            </f:facet>
+            <f:facet name="right">
+                <h:outputText value="Welcome, #{userBean.currentUser.firstName}!" style="margin-right: 10px;"/>
+                <p:button value="Back to Cart" outcome="cart"/>
+                <p:commandButton value="Logout" action="#{userBean.logout}"/>
+            </f:facet>
+        </p:toolbar>
+
+        <h:form>
+            <p:panel header="Order Summary">
+                <h:panelGroup rendered="#{!userBean.loggedIn}">
+                    <p:message severity="warn" value="Please login to proceed with checkout."/>
+                    <p:button value="Login" outcome="login"/>
+                </h:panelGroup>
+                
+                <h:panelGroup rendered="#{userBean.loggedIn and cartBean.cartItemCount == 0}">
+                    <p:message severity="info" value="Your cart is empty. Add some products first!"/>
+                    <p:button value="Continue Shopping" outcome="products"/>
+                </h:panelGroup>
+                
+                <h:panelGroup rendered="#{userBean.loggedIn and cartBean.cartItemCount > 0}">
+                    <p:dataTable value="#{cartBean.cartItems}" var="item" 
+                               emptyMessage="Your cart is empty">
+                        
+                        <p:column headerText="Product">
+                            <h:outputText value="#{item.product.name}"/>
+                        </p:column>
+                        
+                        <p:column headerText="Quantity">
+                            <h:outputText value="#{item.quantity}"/>
+                        </p:column>
+                        
+                        <p:column headerText="Unit Price">
+                            <h:outputText value="DH#{item.unitPrice}"/>
+                        </p:column>
+                        
+                        <p:column headerText="Subtotal">
+                            <h:outputText value="DH#{item.subtotal}"/>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:separator/>
+                    
+                    <p:panelGrid columns="2" style="width: 300px; margin-left: auto;">
+                        <h:outputText value="Total:" style="font-weight: bold; font-size: 18px;"/>
+                        <h:outputText value="DH#{cartBean.cartTotal}" style="font-weight: bold; font-size: 18px; color: green;"/>
+                    </p:panelGrid>
+                    
+                    <p:separator/>
+                    
+                    <p:panel header="Shipping Information">
+                        <p:panelGrid columns="2" style="width: 100%;">
+                            <h:outputLabel for="shippingAddress" value="Shipping Address:"/>
+                            <p:inputTextarea id="shippingAddress" value="#{userBean.currentUser.address}" 
+                                           placeholder="Enter shipping address" rows="3"/>
+                            
+                            <h:outputLabel for="notes" value="Order Notes:"/>
+                            <p:inputTextarea id="notes" placeholder="Any special instructions..." rows="2"/>
+                        </p:panelGrid>
+                    </p:panel>
+                    
+                    <p:separator/>
+                    
+                    <p:commandButton value="Place Order" action="#{orderBean.placeOrder}" 
+                                   styleClass="ui-button-success" style="width: 200px; font-size: 16px;"/>
+                    
+                    <p:button value="Back to Cart" outcome="cart" 
+                                   styleClass="ui-button-secondary" style="width: 200px; font-size: 16px;"/>
+                </h:panelGroup>
+            </p:panel>
+        </h:form>
+    </div>
+</h:body>
+</html>

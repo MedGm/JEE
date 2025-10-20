@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:jsf="jakarta.faces"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Login - E-Commerce Store</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+
+<h:body>
+    <div class="container">
+        <div class="login-container">
+            <h2>Login</h2>
+            
+            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true"/>
+            
+            <h:form>
+                <p:panel header="Login to Your Account">
+                    <p:panelGrid columns="2" style="width: 100%;">
+                        <h:outputLabel for="email" value="Email:"/>
+                        <p:inputText id="email" value="#{userBean.loginEmail}" required="true" 
+                                   placeholder="Enter your email"/>
+                        
+                        <h:outputLabel for="password" value="Password:"/>
+                        <p:password id="password" value="#{userBean.loginPassword}" required="true" 
+                                  placeholder="Enter your password"/>
+                    </p:panelGrid>
+                    
+                    <p:separator/>
+                    
+                    <p:commandButton value="Login" action="#{userBean.login}" 
+                                   styleClass="ui-button-success" style="width: 100%;"/>
+                    
+                    <p:separator/>
+                    
+                    <p:button value="Register New Account" outcome="register" 
+                                   styleClass="ui-button-info" style="width: 100%;"/>
+                    
+                    <p:button value="Back to Home" outcome="index" 
+                                   styleClass="ui-button-secondary" style="width: 100%;"/>
+                </p:panel>
+            </h:form>
+        </div>
+    </div>
+</h:body>
+</html>

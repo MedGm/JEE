@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:jsf="jakarta.faces"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Shopping Cart - E-Commerce Store</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+
+<h:body>
+    <div class="container">
+        <!-- Header -->
+        <p:toolbar>
+            <f:facet name="left">
+                <h:outputText value="Shopping Cart" style="font-size: 24px; font-weight: bold;"/>
+            </f:facet>
+            <f:facet name="right">
+                <h:outputText value="Welcome, #{userBean.currentUser.firstName}!" style="margin-right: 10px;"/>
+                <p:button value="Continue Shopping" outcome="products"/>
+                <p:commandButton value="Logout" action="#{userBean.logout}"/>
+            </f:facet>
+        </p:toolbar>
+
+        <h:form id="cartForm">
+            <p:panel header="Your Shopping Cart">
+                <h:panelGroup rendered="#{!userBean.loggedIn}">
+                    <p:message severity="warn" value="Please login to view your cart."/>
+                    <p:button value="Login" outcome="login"/>
+                </h:panelGroup>
+                
+                <h:panelGroup rendered="#{userBean.loggedIn}">
+                    <p:dataTable value="#{cartBean.cartItems}" var="item" 
+                               emptyMessage="Your cart is empty">
+                        
+                        <p:column headerText="Product">
+                            <h:outputText value="#{item.product.name}"/>
+                        </p:column>
+                        
+                        <p:column headerText="Unit Price">
+                            <h:outputText value="DH#{item.unitPrice}"/>
+                        </p:column>
+                        
+                        <p:column headerText="Quantity">
+                            <p:inputNumber value="#{item.quantity}" min="1" max="#{item.product.stock}" 
+                                          onchange="cartBean.updateQuantity(item.product.id, parseInt(this.value));"/>
+                            <p:commandButton value="Update" action="#{cartBean.updateQuantity(item.product.id, item.quantity)}" 
+                                           update=":cartForm" styleClass="ui-button-info" style="margin-left: 5px;"/>
+                        </p:column>
+                        
+                        <p:column headerText="Subtotal">
+                            <h:outputText value="DH#{item.subtotal}"/>
+                        </p:column>
+                        
+                        <p:column headerText="Actions">
+                            <p:commandButton value="Remove" action="#{cartBean.removeFromCart(item.product.id)}" 
+                                           update=":cartForm" styleClass="ui-button-danger"/>
+                        </p:column>
+                    </p:dataTable>
+                    
+                    <p:separator/>
+                    
+                    <p:panelGrid columns="2" style="width: 300px; margin-left: auto;">
+                        <h:outputText value="Total:" style="font-weight: bold; font-size: 16px;"/>
+                        <h:outputText value="DH#{cartBean.cartTotal}" style="font-weight: bold; font-size: 16px; color: green;"/>
+                    </p:panelGrid>
+                    
+                    <p:separator/>
+                    
+                    <p:commandButton value="Proceed to Checkout" outcome="checkout" 
+                                   styleClass="ui-button-success" style="margin-right: 10px;"
+                                   rendered="#{cartBean.cartItemCount > 0}"/>
+                    <p:commandButton value="Clear Cart" action="#{cartBean.clearCart}" 
+                                   styleClass="ui-button-danger" 
+                                   rendered="#{cartBean.cartItemCount > 0}"/>
+                </h:panelGroup>
+            </p:panel>
+        </h:form>
+    </div>
+</h:body>
+</html>

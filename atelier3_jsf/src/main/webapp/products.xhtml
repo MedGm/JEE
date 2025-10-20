@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:jsf="jakarta.faces"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Products - E-Commerce Store</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+
+<h:body>
+    <div class="container">
+        <!-- Header -->
+        <p:toolbar>
+            <f:facet name="left">
+                <h:outputText value="Products" style="font-size: 24px; font-weight: bold;"/>
+            </f:facet>
+            <f:facet name="right">
+                <h:panelGroup rendered="#{userBean.loggedIn}">
+                    <h:outputText value="Welcome, #{userBean.currentUser.firstName}!" style="margin-right: 10px;"/>
+                    <p:button value="Cart (#{cartBean.cartItemCount})" outcome="cart"/>
+                    <p:commandButton value="Logout" action="#{userBean.logout}"/>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{!userBean.loggedIn}">
+                    <p:button value="Login" outcome="login"/>
+                    <p:button value="Register" outcome="register"/>
+                </h:panelGroup>
+            </f:facet>
+        </p:toolbar>
+
+        <!-- Search and Filter -->
+        <p:panel header="Search and Filter Products">
+            <h:form id="searchForm">
+                <p:panelGrid columns="3" style="width: 100%;">
+                    <h:outputLabel for="searchTerm" value="Search:"/>
+                    <p:inputText id="searchTerm" value="#{productBean.searchTerm}" 
+                               placeholder="Enter product name..."/>
+                    <p:commandButton value="Search" action="#{productBean.search}" 
+                                   update=":searchForm:productsTable" styleClass="ui-button-info"/>
+                    
+                    <h:outputLabel for="category" value="Category:"/>
+                    <p:selectOneMenu id="category" value="#{productBean.selectedCategoryId}">
+                        <f:selectItem itemLabel="All Categories" itemValue=""/>
+                        <f:selectItem itemLabel="Electronics" itemValue="1"/>
+                        <f:selectItem itemLabel="Clothing" itemValue="2"/>
+                        <f:selectItem itemLabel="Books" itemValue="3"/>
+                    </p:selectOneMenu>
+                    <p:commandButton value="Filter" action="#{productBean.loadProducts}" 
+                                   update=":searchForm:productsTable" styleClass="ui-button-info"/>
+                    
+                    <h:outputText value=""/>
+                    <p:commandButton value="Clear Filters" action="#{productBean.clearSearch}" 
+                                   update=":searchForm:productsTable" styleClass="ui-button-secondary"/>
+                    <p:commandButton value="Back to Home" outcome="index" 
+                                   styleClass="ui-button-secondary"/>
+                </p:panelGrid>
+            </h:form>
+        </p:panel>
+
+        <!-- Products Table -->
+        <p:dataTable id="productsTable" value="#{productBean.products}" var="product" 
+                    paginator="true" rows="10" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowsPerPageTemplate="5,10,15,20">
+            
+            <p:column headerText="Image" style="width: 100px;">
+                <h:graphicImage value="#{product.imageUrl}" style="width: 80px; height: 60px;" 
+                              rendered="#{product.imageUrl != null}"/>
+            </p:column>
+            
+            <p:column headerText="Name" sortBy="#{product.name}">
+                <h:outputText value="#{product.name}"/>
+            </p:column>
+            
+            <p:column headerText="Description">
+                <h:outputText value="#{product.description}" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;"/>
+            </p:column>
+            
+            <p:column headerText="Price" sortBy="#{product.price}">
+                <h:outputText value="DH#{product.price}" style="font-weight: bold; color: green;"/>
+            </p:column>
+            
+            <p:column headerText="Stock" sortBy="#{product.stock}">
+                <h:outputText value="#{product.stock}"/>
+            </p:column>
+            
+            <p:column headerText="Actions" style="width: 200px;">
+                <p:commandButton value="View Details" action="#{productBean.viewProduct(product.id)}" 
+                               styleClass="ui-button-info" style="margin-right: 5px;"/>
+                <h:panelGroup rendered="#{userBean.loggedIn and product.stock > 0}">
+                    <p:commandButton value="Add to Cart" 
+                                   action="#{cartBean.addToCart(product.id, 1)}" 
+                                   update=":searchForm:productsTable" 
+                                   styleClass="ui-button-success"/>
+                </h:panelGroup>
+            </p:column>
+        </p:dataTable>
+    </div>
+</h:body>
+</html>

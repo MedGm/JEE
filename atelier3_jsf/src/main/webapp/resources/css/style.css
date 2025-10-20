@@ -1,0 +1,176 @@
+/* Global Styles
+Created the file to include the PrimeFaces CSS and other global styles.
+*/
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header Styles */
+.ui-toolbar {
+    background-color: #2c3e50;
+    color: white;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.ui-toolbar .ui-button {
+    margin-left: 10px;
+}
+
+/* Navigation Styles */
+.ui-menubar {
+    background-color: #34495e;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.ui-menubar .ui-menuitem-link {
+    color: white;
+}
+
+.ui-menubar .ui-menuitem-link:hover {
+    background-color: #2c3e50;
+}
+
+/* Content Styles */
+.content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+/* Login/Register Styles */
+.login-container, .register-container {
+    max-width: 500px;
+    margin: 50px auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Product Grid Styles */
+.ui-datagrid .ui-panel {
+    margin: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: box-shadow 0.3s;
+}
+
+.ui-datagrid .ui-panel:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Data Table Styles */
+.ui-datatable {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.ui-datatable .ui-datatable-header {
+    background-color: #ecf0f1;
+    font-weight: bold;
+}
+
+/* Button Styles */
+.ui-button-success {
+    background-color: #27ae60;
+    border-color: #27ae60;
+}
+
+.ui-button-success:hover {
+    background-color: #229954;
+    border-color: #229954;
+}
+
+.ui-button-info {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+.ui-button-info:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+.ui-button-danger {
+    background-color: #e74c3c;
+    border-color: #e74c3c;
+}
+
+.ui-button-danger:hover {
+    background-color: #c0392b;
+    border-color: #c0392b;
+}
+
+.ui-button-secondary {
+    background-color: #95a5a6;
+    border-color: #95a5a6;
+}
+
+.ui-button-secondary:hover {
+    background-color: #7f8c8d;
+    border-color: #7f8c8d;
+}
+
+/* Footer Styles */
+.footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #2c3e50;
+    color: white;
+    border-radius: 5px;
+}
+
+/* Form Styles */
+.ui-panelgrid td {
+    padding: 10px;
+}
+
+.ui-inputtext, .ui-password, .ui-inputtextarea, .ui-selectonemenu {
+    width: 100%;
+}
+
+/* Spinner Styles */
+.ui-spinner {
+    width: 60px;
+}
+
+/* Message Styles */
+.ui-messages {
+    margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .ui-datagrid {
+        columns: 1;
+    }
+    
+    .ui-toolbar {
+        text-align: center;
+    }
+    
+    .ui-toolbar .ui-button {
+        display: block;
+        margin: 5px auto;
+        width: 100%;
+    }
+}

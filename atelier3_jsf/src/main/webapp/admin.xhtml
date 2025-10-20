@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="jakarta.faces.html"
+       xmlns:f="jakarta.faces.core"
+       xmlns:jsf="jakarta.faces"
+       xmlns:ui="jakarta.faces.facelets"
+       xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Admin Panel - E-Commerce Store</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+
+<h:body>
+    <div class="container">
+        <!-- Header -->
+        <p:toolbar>
+            <f:facet name="left">
+                <h:outputText value="Admin Panel" style="font-size: 24px; font-weight: bold;"/>
+            </f:facet>
+            <f:facet name="right">
+                <h:outputText value="Welcome, #{userBean.currentUser.firstName}!" style="margin-right: 10px;"/>
+                <p:button value="Back to Store" outcome="index"/>
+                <p:commandButton value="Logout" action="#{userBean.logout}"/>
+            </f:facet>
+        </p:toolbar>
+
+        <h:panelGroup rendered="#{!userBean.admin}">
+            <p:message severity="error" value="Access denied. Admin privileges required."/>
+            <p:button value="Back to Home" outcome="index"/>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{userBean.admin}">
+            <p:tabView>
+                <p:tab title="Products">
+                    <h:form>
+                        <p:dataTable value="#{productBean.products}" var="product" 
+                                    paginator="true" rows="10" editable="true">
+                            
+                            <p:column headerText="ID">
+                                <h:outputText value="#{product.id}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Name">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{product.name}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputText value="#{product.name}"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            
+                            <p:column headerText="Price">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="DH#{product.price}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputNumber value="#{product.price}" decimalPlaces="2"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            
+                            <p:column headerText="Stock">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{product.stock}"/>
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <p:inputNumber value="#{product.stock}"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            
+                            <p:column headerText="Actions">
+                                <p:rowEditor/>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </p:tab>
+                
+                <p:tab title="Users">
+                    <h:form>
+                        <p:dataTable value="#{userBean.allUsers}" var="user" 
+                                    paginator="true" rows="10">
+                            
+                            <p:column headerText="ID">
+                                <h:outputText value="#{user.id}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Name">
+                                <h:outputText value="#{user.firstName} #{user.lastName}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Email">
+                                <h:outputText value="#{user.email}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Role">
+                                <h:outputText value="#{user.role}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Phone">
+                                <h:outputText value="#{user.phone}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </p:tab>
+                
+                <p:tab title="Orders">
+                    <h:form>
+                        <p:dataTable value="#{orderBean.allOrders}" var="order" 
+                                    paginator="true" rows="10">
+                            
+                            <p:column headerText="Order ID">
+                                <h:outputText value="#{order.id}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Customer">
+                                <h:outputText value="#{order.user.firstName} #{order.user.lastName}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Total">
+                                <h:outputText value="DH#{order.totalAmount}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Status">
+                                <h:outputText value="#{order.status}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Date">
+                                <h:outputText value="#{order.orderDate}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+        </h:panelGroup>
+    </div>
+</h:body>
+</html>
