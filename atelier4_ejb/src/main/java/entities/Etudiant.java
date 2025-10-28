@@ -38,6 +38,6 @@ public class Etudiant implements Serializable {
 
     // One Etudiant has many Suivie (notes)
     @OneToMany(mappedBy = "etudiant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Suivie> suivies;
+    private transient List<Suivie> suivies;
 
 }

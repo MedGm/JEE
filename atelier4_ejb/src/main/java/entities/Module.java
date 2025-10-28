@@ -27,5 +27,5 @@ public class Module implements Serializable {
 
     // One Module has many Suivie
     @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Suivie> suivies;
+    private transient List<Suivie> suivies;
 }

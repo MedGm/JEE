@@ -29,12 +29,12 @@ public class Suivie implements Serializable {
     private LocalDate date;
 
     // Many Suivie belong to one Etudiant
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_etudiant", nullable = false)
     private Etudiant etudiant;
 
     // Many Suivie belong to one Module
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_module", nullable = false)
     private Module module;
 }
