@@ -10,10 +10,10 @@
         <h2 class="mb-4">Modifier un Module</h2>
         <% Module module = (Module) request.getAttribute("module"); %>
         <form method="POST" action="edit">
-            <input type="hidden" name="id" value="${module.idModule}">
+            <input type="hidden" name="id" value="<%= module.getIdModule() %>">
             <div class="form-group">
                 <label for="nomModule">Nom du Module:</label>
-                <input type="text" class="form-control" id="nomModule" name="nomModule" value="${module.nomModule}" required>
+                <input type="text" class="form-control" id="nomModule" name="nomModule" value="<%= module.getNomModule() %>" required>
             </div>
             <button type="submit" class="btn btn-primary">Modifier</button>
             <a href="list" class="btn btn-secondary">Annuler</a>

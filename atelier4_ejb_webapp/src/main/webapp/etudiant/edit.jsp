@@ -10,26 +10,26 @@
         <h2 class="mb-4">Modifier un Etudiant</h2>
         <% Etudiant etudiant = (Etudiant) request.getAttribute("etudiant"); %>
         <form method="POST" action="edit">
-            <input type="hidden" name="id" value="${etudiant.idEtudiant}">
+            <input type="hidden" name="id" value="<%= etudiant.getIdEtudiant() %>">
             <div class="form-group">
                 <label for="nom">Nom:</label>
-                <input type="text" class="form-control" id="nom" name="nom" value="${etudiant.nom}" required>
+                <input type="text" class="form-control" id="nom" name="nom" value="<%= etudiant.getNom() %>" required>
             </div>
             <div class="form-group">
                 <label for="prenom">Prénom:</label>
-                <input type="text" class="form-control" id="prenom" name="prenom" value="${etudiant.prenom}" required>
+                <input type="text" class="form-control" id="prenom" name="prenom" value="<%= etudiant.getPrenom() %>" required>
             </div>
             <div class="form-group">
                 <label for="cne">CNE:</label>
-                <input type="text" class="form-control" id="cne" name="cne" value="${etudiant.cne}" required>
+                <input type="text" class="form-control" id="cne" name="cne" value="<%= etudiant.getCne() %>" required>
             </div>
             <div class="form-group">
                 <label for="adresse">Adresse:</label>
-                <input type="text" class="form-control" id="adresse" name="adresse" value="${etudiant.adresse}">
+                <input type="text" class="form-control" id="adresse" name="adresse" value="<%= etudiant.getAdresse() != null ? etudiant.getAdresse() : "" %>">
             </div>
             <div class="form-group">
                 <label for="niveau">Niveau:</label>
-                <input type="text" class="form-control" id="niveau" name="niveau" value="${etudiant.niveau}">
+                <input type="text" class="form-control" id="niveau" name="niveau" value="<%= etudiant.getNiveau() != null ? etudiant.getNiveau() : "" %>">
             </div>
             <button type="submit" class="btn btn-primary">Modifier</button>
             <a href="list" class="btn btn-secondary">Annuler</a>

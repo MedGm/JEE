@@ -202,41 +202,9 @@ mvn clean install
 - `/suivie/edit?id=X` - Modifier
 - `/suivie/delete?id=X` - Supprimer
 
-## 🏗️ Architecture
-
-### Pattern MVC 2
-
-```
-┌─────────────────────────────────────────────────┐
-│           COUCHE PRÉSENTATION                   │
-│  JSP (Vues) ← Servlets (Contrôleurs)            │
-└─────────────────────────────────────────────────┘
-                    ↓ @EJB
-┌─────────────────────────────────────────────────┐
-│           COUCHE MÉTIER                         │
-│  EJB Stateless (Business Logic)                 │
-└─────────────────────────────────────────────────┘
-                    ↓
-┌─────────────────────────────────────────────────┐
-│           COUCHE PERSISTANCE                    │
-│  JPA/Hibernate (ORM)                            │
-└─────────────────────────────────────────────────┘
-                    ↓
-┌─────────────────────────────────────────────────┐
-│           BASE DE DONNÉES                       │
-│  MySQL                                          │
-└─────────────────────────────────────────────────┘
-```
-
-### Injection de Dépendances
-
-- **@EJB** - Injection des services EJB dans les Servlets
-- **@PersistenceContext** - Injection de l'EntityManager dans les services
-- **@Stateless** - Services métier sans état
-
 ## 📝 Fichiers Clés
 
-### persistence.xml
+### persistence.xml (atelier4_ejb)
 ```xml
 <persistence-unit name="cnx" transaction-type="JTA">
     <jta-data-source>java:/MySQLDS</jta-data-source>
@@ -249,36 +217,108 @@ mvn clean install
 </persistence-unit>
 ```
 
-### pom.xml
-- Packaging : WAR
-- Java 17
-- Dépendances JEE 10, Hibernate, MySQL Connector
+### jndi.properties (atelier4_ejb_webapp)
+```properties
+java.naming.factory.initial=org.wildfly.naming.client.WildFlyInitialContextFactory
+java.naming.provider.url=remote+http://localhost:8080
+jboss.naming.client.ejb.context=true
+```
+
+### pom.xml (atelier4_ejb)
+- **Packaging :** `ejb`
+- **Java 17**
+- **Dépendances :** Jakarta EE 10, Hibernate, MySQL Connector, Lombok
+
+### pom.xml (atelier4_ejb_webapp)
+- **Packaging :** `war`
+- **Java 17**
+- **Dépendances :** Jakarta Servlet 6.1, WildFly EJB Client, WildFly Naming Client, Transaction Client
+- **Type de dépendance EJB :** `<type>ejb</type>` pour référencer le module EJB
 
 ## 🔧 Résolution de Problèmes
 
 ### Erreurs Communes
 
-1. **LazyInitializationException**
+1. **ClassNotFoundException: WildFlyInitialContextFactory**
+   - Solution : Ajouter les dépendances WildFly client dans le pom.xml de l'application web
+   - Dépendances requises : `jboss-ejb-client`, `wildfly-naming-client`, `wildfly-transaction-client`
+
+2. **NoSuchMethodError avec transactions**
+   - Solution : Ajouter `wildfly-transaction-client` pour la compatibilité des transactions distribuées
+
+3. **LazyInitializationException**
    - Solution : Utiliser `FetchType.EAGER` ou `LEFT JOIN FETCH` dans les requêtes JPA
 
-2. **NotSerializableException**
-   - Solution : Implémenter `Serializable` dans les entités
+4. **NotSerializableException**
+   - Solution : Implémenter `Serializable` dans les entités JPA
 
-3. **Erreur 404**
-   - Solution : Vérifier les mappings `@WebServlet` et les chemins JSP
+5. **Erreur 404 ou mapping de servlet**
+   - Solution : Vérifier les annotations `@WebServlet` et les chemins JSP
 
-4. **DataSource non trouvé**
+6. **DataSource non trouvé**
    - Solution : Vérifier la configuration du DataSource dans WildFly
+
+7. **Connection refused to WildFly**
+   - Solution : Vérifier que WildFly est démarré sur le port 8080
+   - Vérifier le firewall et la configuration de `EJBClientUtil.java`
+
+### Logs de Diagnostic
+
+**WildFly :** `/opt/wildfly/standalone/log/server.log`  
+**Tomcat :** `$TOMCAT_HOME/logs/catalina.out`
 
 ## 📊 Résultats
 
-L'application est maintenant fonctionnelle avec :
-- ✅ CRUD complet sur les 3 entités
-- ✅ Interface web moderne (Bootstrap)
-- ✅ Architecture MVC 2 respectée
-- ✅ Injection de dépendances EJB
-- ✅ Persistance JPA automatique
-- ✅ Déploiement sur WildFly
+L'application distribuée est maintenant fonctionnelle avec :
+
+### Architecture
+- ✅ **Architecture distribuée** : 2 serveurs (WildFly + Tomcat)
+- ✅ **Communication EJB Remote** via JNDI
+- ✅ **Séparation des responsabilités** : Présentation / Métier / Persistance
+- ✅ **Scalabilité horizontale** possible
+
+### Fonctionnalités
+- ✅ **CRUD complet** sur 3 entités (Etudiant, Module, Suivie)
+- ✅ **Interface web moderne** avec Bootstrap
+- ✅ **Architecture MVC 2** respectée
+- ✅ **EJB Session Beans** avec interfaces Remote
+- ✅ **Persistance JPA** automatique
+- ✅ **Gestion des transactions** distribuées
+
+### Avantages
+- 🚀 **Performance** : Séparation web/métier permet le load balancing
+- 📈 **Scalabilité** : Plusieurs instances Tomcat peuvent pointer vers WildFly
+- 🔧 **Maintenabilité** : Modifications indépendantes des couches
+- 🔒 **Sécurité** : Couche métier isolée du frontend
+- 🌐 **Réutilisabilité** : Les EJBs peuvent être appelés par d'autres clients
+
+## 🧪 Test de la Communication Distribuée
+
+Une fois les deux serveurs démarrés :
+
+```bash
+# Vérifier WildFly
+curl http://localhost:8080/
+
+# Vérifier Tomcat
+curl http://localhost:9090/atelier4_ejb_webapp-1.0-SNAPSHOT/
+
+# Tester un appel EJB distant
+curl http://localhost:9090/atelier4_ejb_webapp-1.0-SNAPSHOT/etudiant/list
+```
+
+**Dans les logs WildFly**, vous verrez :
+```
+INFO [org.jboss.ejb.client] (default task-1) Remote EJB invocation: EtudiantService.listerEtudiants()
+```
+
+**Dans les logs Tomcat**, vous verrez :
+```
+INFO [http-nio-9090-exec-1] WildFly Naming version 1.0.16.Final
+INFO [http-nio-9090-exec-1] JBoss EJB Client version 4.0.53.Final
+```
+
+Cela confirme la communication **inter-serveurs** réussie !
 
 ## 📚 Références
 

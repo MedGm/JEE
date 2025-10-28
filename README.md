@@ -24,6 +24,7 @@ Chaque atelier est un projet indépendant qui illustre un aspect des standards J
 | **Atelier 1 – MVC2 (Servlet/JSP/DAO/CDI)** | [`atelier1_mvc2`](atelier1_mvc2/) | Première application web basée sur MVC2 : gestion des clients, produits et commandes avec DAO et CDI. *(Contient un README détaillé du projet)* |
 | **Atelier 2 – JPA** | [`atelier2_jpa`](https://github.com/MedGm/JEE/tree/master/atelier2_jpa) | Application web avec JPA pour la persistance des données. |
 | **Atelier 3 – JSF & JPA** | [`atelier3_jsf`](https://github.com/MedGm/JEE/tree/master/atelier3_jsf) | Application E-Commerce avec JSF, JPA, et PrimeFaces. |
+| **Atelier 4 – EJB 4.0 & Architecture Distribuée** | [`atelier4_ejb`](atelier4_ejb/) | Architecture distribuée JEE avec EJB Remote : couche métier sur WildFly (port 8080) et application web sur Tomcat (port 9090) communiquant via JNDI. Gestion complète d'étudiants, modules et notes. *(Contient un README détaillé du projet)* |
 
 > Chaque dossier contient son propre README.md détaillant le fonctionnement du projet.
 
@@ -32,8 +33,8 @@ Chaque atelier est un projet indépendant qui illustre un aspect des standards J
 ## Technologies communes
 
 - **Langage :** Java 17+  
-- **Framework :** Jakarta EE (Servlet, JSP, JSTL, CDI)  
-- **Serveur d’application :** WildFly  
+- **Framework :** Jakarta EE (Servlet, JSP, JSTL, CDI, EJB, JPA)  
+- **Serveurs d'application :** WildFly, Tomcat (architecture distribuée)  
 - **Base de données :** MySQL  
 - **Gestion de projet :** Maven  
 - **IDE :** IntelliJ IDEA Ultimate  
