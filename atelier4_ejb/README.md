@@ -2,79 +2,105 @@
 
 **Auteur :** El Gorrim Mohamed  
 **Date :** 27/10/2025  
-**Outils :** IntelliJ IDEA, Maven, MySQL, JPA 3.0, EJB 4.0, WildFly 37
+**Outils :** IntelliJ IDEA, Maven, MySQL, JPA 3.0, EJB 4.0, WildFly 37, Tomcat 11
 
 ## 📋 Introduction
 
-Ce projet documente la mise en place d'une application distribuée JEE utilisant les technologies Java Enterprise Edition modernes. L'application permet de gérer des étudiants, des modules et leurs suivis (notes), avec une architecture modulaire, scalable et robuste.
+Ce projet démontre une **véritable architecture distribuée JEE** avec deux applications séparées communiquant via EJB Remote :
+
+- **Application EJB (atelier4_ejb)** : Déployée sur **WildFly (port 8080)** - Contient la couche métier (Session Beans) et la persistance JPA
+- **Application Web (atelier4_ejb_webapp)** : Déployée sur **Tomcat (port 9090)** - Contient la couche présentation (Servlets + JSP)
+
+Les deux applications communiquent via **JNDI** et le **protocole remote+http**, permettant une séparation claire des responsabilités et une scalabilité horizontale.
 
 ### Technologies Utilisées
 
-- **EJB 4.0** - Couche métier (Enterprise Java Beans)
-- **JPA 3.0 (Hibernate)** - Persistance des données
-- **WildFly 37** - Serveur d'application JEE
-- **MySQL** - Système de gestion de base de données
+- **EJB 4.0** - Session Beans Stateless avec interfaces Remote
+- **JPA 3.0 (Hibernate)** - Persistance des données avec génération automatique du schéma
+- **WildFly 37** - Serveur d'application pour la couche métier
+- **Tomcat 11** - Serveur web pour la couche présentation
+- **MySQL 8.0** - Système de gestion de base de données
 - **Maven** - Gestion des dépendances et build
 - **JSP/Servlets** - Présentation web (MVC 2)
+- **WildFly Naming Client** - Communication JNDI entre serveurs
 
 ## 🎯 Objectifs
 
-- Créer une application web JEE complète avec pattern MVC 2
-- Implémenter un CRUD complet sur 3 entités (Etudiant, Module, Suivie)
-- Utiliser des EJB Stateless injectés via JNDI
-- Configurer la persistance JPA avec génération automatique du schéma
-- Déployer sur WildFly avec DataSource JNDI MySQL
+- ✅ Mettre en place une **architecture distribuée** avec deux serveurs distincts
+- ✅ Implémenter la communication **EJB Remote** via JNDI
+- ✅ Créer un CRUD complet sur 3 entités (Etudiant, Module, Suivie)
+- ✅ Séparer la couche présentation (Tomcat) de la couche métier (WildFly)
+- ✅ Configurer la persistance JPA avec génération automatique du schéma
+- ✅ Déployer sur WildFly avec DataSource JNDI MySQL
+- ✅ Démontrer la scalabilité et flexibilité de l'architecture distribuée
 
 ## 📁 Structure du Projet
+
+### Application EJB (atelier4_ejb) - Sur WildFly
 
 ```
 atelier4_ejb/
 ├── src/main/
 │   ├── java/
-│   │   ├── entities/          # Entités JPA
+│   │   ├── entities/              # Entités JPA
 │   │   │   ├── Etudiant.java
 │   │   │   ├── Module.java
 │   │   │   └── Suivie.java
-│   │   ├── services/           # EJB Services
-│   │   │   ├── EtudiantService.java
-│   │   │   ├── EtudiantServiceRemote.java
-│   │   │   ├── ModuleService.java
-│   │   │   ├── ModuleServiceRemote.java
-│   │   │   ├── SuivieService.java
-│   │   │   └── SuivieServiceRemote.java
-│   │   └── web/               # Servlets MVC 2
-│   │       ├── EtudiantAddServlet.java
-│   │       ├── EtudiantListServlet.java
-│   │       ├── EtudiantEditServlet.java
-│   │       ├── EtudiantDeleteServlet.java
-│   │       ├── ModuleAddServlet.java
-│   │       ├── ModuleListServlet.java
-│   │       ├── ModuleEditServlet.java
-│   │       ├── ModuleDeleteServlet.java
-│   │       ├── SuivieAddServlet.java
-│   │       ├── SuivieListServlet.java
-│   │       ├── SuivieEditServlet.java
-│   │       └── SuivieDeleteServlet.java
-│   ├── webapp/
-│   │   ├── index.jsp          # Page d'accueil
-│   │   ├── etudiant/          # JSP Etudiants
-│   │   │   ├── add.jsp
-│   │   │   ├── edit.jsp
-│   │   │   └── list.jsp
-│   │   ├── module/             # JSP Modules
-│   │   │   ├── add.jsp
-│   │   │   ├── edit.jsp
-│   │   │   └── list.jsp
-│   │   ├── suivie/             # JSP Notes
-│   │   │   ├── add.jsp
-│   │   │   ├── edit.jsp
-│   │   │   └── list.jsp
-│   │   └── WEB-INF/
-│   │       └── web.xml
+│   │   └── services/              # EJB Session Beans
+│   │       ├── EtudiantService.java        (Stateless)
+│   │       ├── EtudiantServiceRemote.java  (Interface Remote)
+│   │       ├── ModuleService.java
+│   │       ├── ModuleServiceRemote.java
+│   │       ├── SuivieService.java
+│   │       └── SuivieServiceRemote.java
 │   └── resources/
 │       └── META-INF/
-│           └── persistence.xml # Configuration JPA
-└── pom.xml                     # Configuration Maven
+│           ├── persistence.xml    # Configuration JPA
+│           └── beans.xml          # Configuration CDI
+└── pom.xml                        # Packaging: ejb
+```
+
+### Application Web (atelier4_ejb_webapp) - Sur Tomcat
+
+```
+atelier4_ejb_webapp/
+├── src/main/
+│   ├── java/
+│   │   └── web/
+│   │       ├── EJBClientUtil.java         # Utilitaire JNDI
+│   │       └── remote/                    # Servlets avec appels distants
+│   │           ├── EtudiantListServletRemote.java
+│   │           ├── EtudiantAddServletRemote.java
+│   │           ├── EtudiantEditServletRemote.java
+│   │           ├── EtudiantDeleteServletRemote.java
+│   │           ├── ModuleListServletRemote.java
+│   │           ├── ModuleAddServletRemote.java
+│   │           ├── ModuleEditServletRemote.java
+│   │           ├── ModuleDeleteServletRemote.java
+│   │           ├── SuivieListServletRemote.java
+│   │           ├── SuivieAddServletRemote.java
+│   │           ├── SuivieEditServletRemote.java
+│   │           └── SuivieDeleteServletRemote.java
+│   ├── resources/
+│   │   └── jndi.properties        # Configuration JNDI
+│   └── webapp/
+│       ├── index.jsp              # Page d'accueil
+│       ├── etudiant/              # JSP Etudiants
+│       │   ├── add.jsp
+│       │   ├── edit.jsp
+│       │   └── list.jsp
+│       ├── module/                # JSP Modules
+│       │   ├── add.jsp
+│       │   ├── edit.jsp
+│       │   └── list.jsp
+│       ├── suivie/                # JSP Notes
+│       │   ├── add.jsp
+│       │   ├── edit.jsp
+│       │   └── list.jsp
+│       └── WEB-INF/
+│           ├── web.xml
+│           └── beans.xml
+└── pom.xml                        # Packaging: war + dépendances WildFly client
 ```
 
 ## 🗄️ Schéma de Base de Données
@@ -84,7 +110,7 @@ atelier4_ejb/
 #### Table : `etudiant`
 - `id_etudiant` (INT, Primary Key, Auto Increment)
 - `nom` (VARCHAR 50, NOT NULL)
-- `prénom` (VARCHAR 50, NOT NULL)
+- `prenom` (VARCHAR 50, NOT NULL)
 - `cne` (VARCHAR 20, UNIQUE, NOT NULL)
 - `adresse` (VARCHAR 100)
 - `niveau` (VARCHAR 20)
@@ -107,6 +133,7 @@ atelier4_ejb/
 - Java 17 ou supérieur
 - Maven 3.6+
 - WildFly 37
+- Tomcat 11
 - MySQL 8.0+
 - PhpMyAdmin (optionnel)
 
@@ -156,13 +183,54 @@ Accédez à la console d'administration : `http://localhost:9990`
 
 ### 3. Build et Déploiement
 
+#### A. Build du module EJB
+
 ```bash
-# Compiler le projet
+cd atelier4_ejb
 mvn clean install
 
-# Le WAR sera généré dans target/
-# Déployer sur WildFly via l'interface ou en copiant le WAR dans deployments/
+# Génère: target/atelier4_ejb-1.0-SNAPSHOT.jar
 ```
+
+#### B. Déployer sur WildFly
+
+```bash
+# Copier le JAR dans le dossier de déploiement
+cp target/atelier4_ejb-1.0-SNAPSHOT.jar /opt/wildfly/standalone/deployments/
+
+# Vérifier les logs WildFly
+tail -f /opt/wildfly/standalone/log/server.log
+
+# Chercher les JNDI bindings :
+# WFLYEJB0473: JNDI bindings for session bean 'EtudiantService'
+# ejb:/atelier4_ejb-1.0-SNAPSHOT/EtudiantService!services.EtudiantServiceRemote
+```
+
+#### C. Build de l'application web
+
+```bash
+cd ../atelier4_ejb_webapp
+mvn clean package
+
+# Génère: target/atelier4_ejb_webapp-1.0-SNAPSHOT.war
+```
+
+#### D. Configurer et démarrer Tomcat (port 9090)
+
+Modifier `$TOMCAT_HOME/conf/server.xml` :
+```xml
+<Connector port="9090" protocol="HTTP/1.1"
+           connectionTimeout="20000"
+           redirectPort="8443" />
+```
+
+Déployer via IntelliJ IDEA ou copier le WAR dans `$TOMCAT_HOME/webapps/`
+
+#### E. Tester l'application distribuée
+
+- **WildFly :** http://localhost:8080/
+- **Application Web :** http://localhost:9090/atelier4_ejb_webapp-1.0-SNAPSHOT/
+- **Liste étudiants :** http://localhost:9090/atelier4_ejb_webapp-1.0-SNAPSHOT/etudiant/list
 
 ## 🎨 Fonctionnalités
 
@@ -201,6 +269,92 @@ mvn clean install
 - `/suivie/list` - Liste des notes
 - `/suivie/edit?id=X` - Modifier
 - `/suivie/delete?id=X` - Supprimer
+
+## 🏗️ Architecture Distribuée
+
+### Schéma Global
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    TOMCAT (Port 9090)                           │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │  COUCHE PRÉSENTATION                                     │   │
+│  │  - JSP (Vues)                                            │   │
+│  │  - Servlets (Contrôleurs)                                │   │
+│  │  - EJBClientUtil (Lookup JNDI)                           │   │
+│  └──────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+                           │
+                           │ JNDI Lookup
+                           │ remote+http://localhost:8080
+                           │
+                           ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                    WILDFLY (Port 8080)                          │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │  COUCHE MÉTIER                                           │   │
+│  │  - EJB Stateless (@Remote)                               │   │
+│  │  - Session Beans                                         │   │
+│  └──────────────────────────────────────────────────────────┘   │
+│                           ↓                                      │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │  COUCHE PERSISTANCE                                      │   │
+│  │  - JPA/Hibernate                                         │   │
+│  │  - EntityManager (@PersistenceContext)                   │   │
+│  └──────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+                           │
+                           ↓
+┌─────────────────────────────────────────────────────────────────┐
+│                    MySQL (Port 3306)                            │
+│                 Base de données Getudians                       │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Communication EJB Remote
+
+**Flux d'une requête :**
+
+1. **Utilisateur** → Accède à `http://localhost:9090/atelier4_ejb_webapp/etudiant/list`
+2. **Tomcat/Servlet** → Utilise `EJBClientUtil.lookupEJB()` pour obtenir l'EJB distant
+3. **JNDI Lookup** → Connexion à WildFly via `remote+http://localhost:8080`
+4. **WildFly/EJB** → Exécute la logique métier (`etudiantService.listerEtudiants()`)
+5. **JPA/Hibernate** → Accède à MySQL via DataSource JNDI
+6. **Résultat** → Retourné via EJB Remote à Tomcat
+7. **JSP** → Affiche les données dans le navigateur
+
+### Classe Utilitaire JNDI
+
+```java
+public class EJBClientUtil {
+    private static final String WILDFLY_HOST = "localhost";
+    private static final int WILDFLY_PORT = 8080;
+    
+    public static <T> T lookupEJB(String beanName, String interfaceName) {
+        String jndiName = "ejb:/atelier4_ejb-1.0-SNAPSHOT//" 
+                        + beanName + "!" + interfaceName;
+        Properties props = new Properties();
+        props.put(Context.INITIAL_CONTEXT_FACTORY, 
+            "org.wildfly.naming.client.WildFlyInitialContextFactory");
+        props.put(Context.PROVIDER_URL, 
+            "remote+http://" + WILDFLY_HOST + ":" + WILDFLY_PORT);
+        Context context = new InitialContext(props);
+        return (T) context.lookup(jndiName);
+    }
+}
+```
+
+### Injection et Lookup
+
+**Sur WildFly (EJB) :**
+- **@Stateless** - Services métier sans état
+- **@Remote** - Interface exposée pour accès distant
+- **@PersistenceContext** - Injection de l'EntityManager
+
+**Sur Tomcat (Web) :**
+- **JNDI Lookup** - Récupération manuelle des EJBs distants
+- **No @EJB injection** - Non supporté sur Tomcat
+- **WildFly Client Libraries** - Pour la communication remote
 
 ## 📝 Fichiers Clés
 
@@ -261,6 +415,9 @@ jboss.naming.client.ejb.context=true
 7. **Connection refused to WildFly**
    - Solution : Vérifier que WildFly est démarré sur le port 8080
    - Vérifier le firewall et la configuration de `EJBClientUtil.java`
+
+8. **Duplicate servlet mappings**
+   - Solution : Ne pas avoir à la fois les servlets normales et remote - utiliser uniquement remote pour Tomcat
 
 ### Logs de Diagnostic
 
@@ -328,3 +485,4 @@ Cela confirme la communication **inter-serveurs** réussie !
 - [How to Create EJB3 JPA Project](http://theopentutorials.com/examples/java-ee/ejb3/how-to-create-ejb3-jpa-project-in-eclipse-jboss-as-5-1/)
 - [EJB3 in Eclipse JBoss AS 7.1](https://ibytecode.com/blog/how-to-create-ejb3-jpa-project-in-eclipse-jboss-as-7-1/)
 - [Database Module WildFly](http://www.thejavageek.com/2015/01/08/database-module-wildfly/)
+- [WildFly EJB Remote Documentation](https://docs.wildfly.org/30/Developer_Guide.html#Remote_EJB_invocations)
