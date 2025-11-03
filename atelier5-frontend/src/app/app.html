@@ -1,0 +1,17 @@
+<div class="app-container">
+  <nav class="app-nav">
+    <div class="app-nav-content">
+      <a routerLink="/" class="app-nav-brand">⛽ Atelier5</a>
+      <div class="app-nav-links">
+        <a routerLink="/stations" routerLinkActive="active" class="app-nav-link">Stations</a>
+        <a routerLink="/carburants" routerLinkActive="active" class="app-nav-link">Carburants</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="app-main">
+    <div class="app-content">
+      <router-outlet />
+    </div>
+  </main>
+</div>
