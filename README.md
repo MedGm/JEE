@@ -25,6 +25,8 @@ Chaque atelier est un projet indépendant qui illustre un aspect des standards J
 | **Atelier 2 – JPA** | [`atelier2_jpa`](https://github.com/MedGm/JEE/tree/master/atelier2_jpa) | Application web avec JPA pour la persistance des données. |
 | **Atelier 3 – JSF & JPA** | [`atelier3_jsf`](https://github.com/MedGm/JEE/tree/master/atelier3_jsf) | Application E-Commerce avec JSF, JPA, et PrimeFaces. |
 | **Atelier 4 – EJB 4.0 & Architecture Distribuée** | [`atelier4_ejb`](atelier4_ejb/) | Architecture distribuée JEE avec EJB Remote : couche métier sur WildFly (port 8080) et application web sur Tomcat (port 9090) communiquant via JNDI. Gestion complète d'étudiants, modules et notes. *(Contient un README détaillé du projet)* |
+| **Atelier 5 – REST API** | [`atelier5_restapi`](atelier5_restapi/) | API REST avec Spring Boot et JPA pour la gestion des produits. |
+| **Atelier 5 – Frontend** | [`atelier5-frontend`](atelier5-frontend/) | Frontend Angular pour l'API REST de l'atelier 5. |
 
 > Chaque dossier contient son propre README.md détaillant le fonctionnement du projet.
 
