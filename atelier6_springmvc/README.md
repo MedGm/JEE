@@ -168,8 +168,8 @@ java -jar target/atelier6_springmvc-0.0.1-SNAPSHOT.jar
 Université Abdelmalek Essaadi  
 Faculté des Sciences et Techniques de Tanger  
 Département Génie Informatique  
-Cycle Master : SIM  
-Applications Distribuées  
+Cycle Ingenieur : LSI 2  
+Architecture Web Distribuées  
 Encadré par : Pr. ELAACHAK LOTFI
 
 ## Licence
