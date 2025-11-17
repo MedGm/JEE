@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${etudiant.id} != null ? 'Éditer étudiant' : 'Nouvel étudiant'">Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">Absences Maternelle</a>
+        <div class="navbar-nav">
+            <a class="nav-link" href="/etudiants">Étudiants</a>
+            <a class="nav-link" href="/absences">Absences</a>
+        </div>
+    </div>
+</nav>
+<div class="container mt-4">
+    <h2 th:text="${etudiant.id} != null ? 'Éditer étudiant' : 'Nouvel étudiant'">Form</h2>
+
+    <form th:action="@{/etudiants/save}" th:object="${etudiant}" method="post" class="mt-4">
+        <input type="hidden" th:if="${etudiant.id != null}" th:field="*{id}"/>
+
+        <div class="mb-3">
+            <label class="form-label">Nom <span class="text-danger">*</span></label>
+            <input class="form-control" th:field="*{nom}" th:classappend="${#fields.hasErrors('nom')} ? 'is-invalid'"/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}">Erreur</div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Prénom <span class="text-danger">*</span></label>
+            <input class="form-control" th:field="*{prenom}" th:classappend="${#fields.hasErrors('prenom')} ? 'is-invalid'"/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('prenom')}" th:errors="*{prenom}">Erreur</div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Date de naissance</label>
+            <input class="form-control" type="date" th:field="*{dateNaissance}" th:classappend="${#fields.hasErrors('dateNaissance')} ? 'is-invalid'"/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('dateNaissance')}" th:errors="*{dateNaissance}">Erreur</div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Classe</label>
+            <input class="form-control" th:field="*{classe}" placeholder="PS, MS, GS"/>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input class="form-control" type="email" th:field="*{email}" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"/>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Erreur</div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Téléphone</label>
+            <input class="form-control" th:field="*{telephone}"/>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Enregistrer</button>
+        <a class="btn btn-secondary" th:href="@{/etudiants}">Annuler</a>
+    </form>
+</div>
+<footer class="footer mt-5 py-3 bg-light">
+    <div class="container text-center">
+        <span class="text-muted">© École — Gestion des absences</span>
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
